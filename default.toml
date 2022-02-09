@@ -1,0 +1,49 @@
+metrics_prefix = "routeros"
+
+[server]
+port = 65534
+
+[defaults]
+username = "username"
+password = "password"
+check_ssl = false
+address = "192.168.88.1"
+port = 443
+
+[defaults.collectors]
+ip_firewall = false
+ip_firewall_filter = true
+ip_firewall_nat = true
+ip_firewall_mangle = true
+ip_firewall_raw = true
+ip_firewall_conntrack = true
+
+health = false
+resources = false
+
+interfaces = false
+interfaces_poe = false
+interfaces_monitor = false
+
+# Create multiple instances tables for each instance that you will query, collectors subtable is optional.
+
+[[instances]]
+username = "another"
+password = "user"
+check_ssl = false
+address = "192.168.88.2"
+port = 443
+[instances.collectors]
+ip_firewall = false
+ip_firewall_filter = true
+ip_firewall_nat = true
+ip_firewall_mangle = true
+ip_firewall_raw = true
+ip_firewall_conntrack = true
+
+health = false
+resources = false
+
+interfaces = false
+interfaces_poe = false
+interfaces_monitor = true
