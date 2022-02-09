@@ -40,6 +40,8 @@ Configuration is read in the following order
 3. Environment variables All configuration variables can be prefixed with ROUTEROS_ to override the configuration files.
    The seperator used is __.
 
+4. Some parts of the configuration can also be overriden as part of the Probe request its self.
+
 An exmaple setup might be as follows
 
 * default.toml
@@ -73,6 +75,29 @@ interfaces_poe = false
 
 * Environment variable
   ```ROUTEROS_SERVER__PORT=12345```
+
+## Example Prometheus scrape configuration
+
+```
+  - job_name: "routeros"
+    scrape_interval: 60s
+    scrape_timeout: 60s
+    metrics_path: /probe
+    params:
+      # Implicitly enable the following collectors in the probe request, overriding the config file
+      collectors: [resources, health, ip_firewall, interfaces_poe, interfaces_monitor, interfaces]
+    static_configs:
+      # IP Addresses of routeros devices
+      - targets: ["192.168.88.3"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        # Replace this with the IP address of the machine running the exporter, and the port which it is running on.
+        replacement: 192.168.1.2:65534
+```
 
 ## Security
 
