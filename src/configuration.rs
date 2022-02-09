@@ -59,12 +59,16 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
 
     // TODO: Allow to specify path, for now /config
     let base_path = std::env::current_dir().expect("Failed to determine the current directory");
-    let configuration_directory = base_path.join("/config");
-
+    let configuration_directory = base_path.join("config");
+    let root_configuration_directory = base_path.join("config");
     // Read the "default" configuration file from default.yaml, and fail if it can't be read
     settings.merge(config::File::with_name("default.toml").required(true))?;
 
     // read in /config/config.toml, don't fail if the file doesnt exist
+    settings
+        .merge(config::File::from(root_configuration_directory.join("config.toml")).required(false))?;
+
+    // read in config/config.toml, don't fail if the file doesnt exist
     settings
         .merge(config::File::from(configuration_directory.join("config.toml")).required(false))?;
 

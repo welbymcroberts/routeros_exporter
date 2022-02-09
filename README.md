@@ -34,13 +34,16 @@ Configuration is read in the following order
 1. default.toml This file is included with the distribtuion and must currently be resident in the directory which
    routeros_exporter is running from
 
-2. config/config.toml This file is a local configuration file that is optional, and will override what is in
+2. /config/config.toml This file is a local configuration file that is optional, and will override what is in
    default.toml
 
-3. Environment variables All configuration variables can be prefixed with ROUTEROS_ to override the configuration files.
+3. config/config.toml This file is a local configuration file that is optional, and will override what is in
+   default.toml
+
+4. Environment variables All configuration variables can be prefixed with ROUTEROS_ to override the configuration files.
    The seperator used is __.
 
-4. Some parts of the configuration can also be overriden as part of the Probe request its self.
+5. Some parts of the configuration can also be overriden as part of the Probe request its self.
 
 An exmaple setup might be as follows
 
