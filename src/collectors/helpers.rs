@@ -83,9 +83,10 @@ pub fn make_metric_preamble(
 
 pub fn convert_to_bps(original: &str) -> String {
     return if original.ends_with("Gbps") {
-        (original.replace("Gbps", "").parse::<i64>().unwrap() * 1000 * 1000 * 1000).to_string()
+        println!("{}... {}", original, original.replace("Gbps", ""));
+        (original.replace("Gbps", "").parse::<f64>().unwrap_or(-1.0) * 1000.0 * 1000.0 * 1000.0).to_string()
     } else if original.ends_with("Mbps") {
-        (original.replace("Mbps", "").parse::<i64>().unwrap() * 1000 * 1000).to_string()
+        (original.replace("Mbps", "").parse::<f64>().unwrap_or(-1.0) * 1000.0 * 1000.0).to_string()
     } else {
         0.to_string()
     };
