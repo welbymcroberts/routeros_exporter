@@ -3,13 +3,13 @@
 A rust based OpenMetrics (prometheus etc) exporter for Mikrotik RouterOS devices running the RouterOS 7.x using the REST
 API.
 
-This project is influenced by the work @nshttpd (and others) has done on their golang based exporter -
-nshttpd/mikrotik-exporter
+This project is influenced by the work [nshttpd](https://github.com/nshttpd) (and others) has done on their golang based exporter -
+[nshttpd/mikrotik-exporter](https://github.com/nshttpd/mikrotik-exporter)
 
 This was created originally as a challenge to create an async REST API client, and should be considered a work in
 progress. Some of what is mentioned in this readme may also not be implemented currently.
 
-This project builds on nshttpd/mikrotik-exporter and is similar to blackbox_exporter and other who use the /probe
+This project builds on [nshttpd/mikrotik-exporter](https://github.com/nshttpd/mikrotik-exporter) and is similar to blackbox_exporter and other who use the /probe
 endpoint to specify which target is to be scraped. A configuration file is used to set the username and password for
 each device, and optionally a set of collectors that are to be enabled.
 
