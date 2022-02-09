@@ -1,16 +1,17 @@
 #[macro_use]
 extern crate lazy_static;
 
-use futures;
-use secrecy::ExposeSecret;
 use std::convert::Infallible;
 use std::hash::Hash;
 use std::net::SocketAddr;
+
+use futures;
+use secrecy::ExposeSecret;
 // use std::time::Instant;
 use tokio;
 use warp::Filter;
 
-use routeros_exporter::configuration::{get_configuration, Collectors};
+use routeros_exporter::configuration::{Collectors, get_configuration};
 
 // lazy_static the config
 lazy_static! {
@@ -144,47 +145,47 @@ async fn http_get_probe(q: Vec<(String, String)>) -> Result<impl warp::Reply, In
     if c.ip_firewall == Some(true) {
         if c.ip_firewall_filter == Some(true) {
             tasks.push(routeros_exporter::spawn_collector!(
-            routeros_exporter::collectors::ip_firewall_filter::run,
-            (*username).parse()?,
-            (*password).parse()?,
-            (*address).parse()?,
-            port.clone(),
-            check_ssl,
-            CONFIG.clone()
-        ));
+                routeros_exporter::collectors::ip_firewall_filter::run,
+                (*username).parse()?,
+                (*password).parse()?,
+                (*address).parse()?,
+                port.clone(),
+                check_ssl,
+                CONFIG.clone()
+            ));
         }
         if c.ip_firewall_nat == Some(true) {
             tasks.push(routeros_exporter::spawn_collector!(
-            routeros_exporter::collectors::ip_firewall_nat::run,
-            (*username).parse()?,
-            (*password).parse()?,
-            (*address).parse()?,
-            port.clone(),
-            check_ssl,
-            CONFIG.clone()
-        ));
+                routeros_exporter::collectors::ip_firewall_nat::run,
+                (*username).parse()?,
+                (*password).parse()?,
+                (*address).parse()?,
+                port.clone(),
+                check_ssl,
+                CONFIG.clone()
+            ));
         }
         if c.ip_firewall_mangle == Some(true) {
             tasks.push(routeros_exporter::spawn_collector!(
-            routeros_exporter::collectors::ip_firewall_mangle::run,
-            (*username).parse()?,
-            (*password).parse()?,
-            (*address).parse()?,
-            port.clone(),
-            check_ssl,
-            CONFIG.clone()
-        ));
+                routeros_exporter::collectors::ip_firewall_mangle::run,
+                (*username).parse()?,
+                (*password).parse()?,
+                (*address).parse()?,
+                port.clone(),
+                check_ssl,
+                CONFIG.clone()
+            ));
         }
         if c.ip_firewall_raw == Some(true) {
             tasks.push(routeros_exporter::spawn_collector!(
-            routeros_exporter::collectors::ip_firewall_raw::run,
-            (*username).parse()?,
-            (*password).parse()?,
-            (*address).parse()?,
-            port.clone(),
-            check_ssl,
-            CONFIG.clone()
-        ));
+                routeros_exporter::collectors::ip_firewall_raw::run,
+                (*username).parse()?,
+                (*password).parse()?,
+                (*address).parse()?,
+                port.clone(),
+                check_ssl,
+                CONFIG.clone()
+            ));
         }
     }
 

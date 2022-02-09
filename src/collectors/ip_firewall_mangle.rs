@@ -1,8 +1,9 @@
+use std::collections::HashMap;
+use std::error::Error;
+
 use crate::collectors::helpers::{
     collector_preamble, collector_request_get, make_metric, make_metric_preamble,
 };
-use std::collections::HashMap;
-use std::error::Error;
 
 pub fn metrics(
     metric_prefix: &str,
@@ -51,70 +52,74 @@ pub async fn run(
     // Count of rules
     let mut count = 0;
     if json.as_array() != None {
-    for rule in json.as_array().unwrap() {
-        labels = "".to_string();
-        for (k, v) in rule.as_object().unwrap() {
-            match k.as_str() {
-                "bytes" | "packets" | "comment" | ".id" | "log" | "log-prefix" | "invalid"
-                | "disabled" => (), // skip
-                _ => {
-                    // add labels for everything else
-                    if labels.len() > 0 {
-                        labels.push_str(",")
-                    };
-                    labels.push_str(&*format!("{k}=\"{v}\"", k = k.replace("-", "_"), v = v.as_str().unwrap()));
+        for rule in json.as_array().unwrap() {
+            labels = "".to_string();
+            for (k, v) in rule.as_object().unwrap() {
+                match k.as_str() {
+                    "bytes" | "packets" | "comment" | ".id" | "log" | "log-prefix" | "invalid"
+                    | "disabled" => (), // skip
+                    _ => {
+                        // add labels for everything else
+                        if labels.len() > 0 {
+                            labels.push_str(",")
+                        };
+                        labels.push_str(&*format!(
+                            "{k}=\"{v}\"",
+                            k = k.replace("-", "_"),
+                            v = v.as_str().unwrap()
+                        ));
+                    }
                 }
             }
-        }
-        // Only do preamble on first interface
-        let mut preamble: bool = false;
-        if count != 0 {
-            preamble = true
-        }
-
-        // Simple metrics
-        let metrics_hash = HashMap::from([
-            (
-                "packets",
-                vec![
-                    "ip_firewall_mangle_packets_total",
-                    "Firewall rule packet count",
-                    "packets",
-                    "counter",
-                ],
-            ),
-            (
-                "bytes",
-                vec![
-                    "ip_firewall_mangle_bytes_total",
-                    "Firewall rule byte count",
-                    "bytes",
-                    "counter",
-                ],
-            ),
-        ]);
-        // Iterate over metrics_hash
-        for (metric, metric_attr) in metrics_hash {
-            if rule.get(metric) != None {
-                ret = format!(
-                    "{}{}",
-                    ret,
-                    metrics(
-                        &config.metrics_prefix,
-                        metric_attr[0],
-                        &rule[metric].as_str().unwrap(),
-                        &labels.to_string(),
-                        metric_attr[3],
-                        metric_attr[1],
-                        metric_attr[2],
-                        preamble
-                    )
-                )
+            // Only do preamble on first interface
+            let mut preamble: bool = false;
+            if count != 0 {
+                preamble = true
             }
+
+            // Simple metrics
+            let metrics_hash = HashMap::from([
+                (
+                    "packets",
+                    vec![
+                        "ip_firewall_mangle_packets_total",
+                        "Firewall rule packet count",
+                        "packets",
+                        "counter",
+                    ],
+                ),
+                (
+                    "bytes",
+                    vec![
+                        "ip_firewall_mangle_bytes_total",
+                        "Firewall rule byte count",
+                        "bytes",
+                        "counter",
+                    ],
+                ),
+            ]);
+            // Iterate over metrics_hash
+            for (metric, metric_attr) in metrics_hash {
+                if rule.get(metric) != None {
+                    ret = format!(
+                        "{}{}",
+                        ret,
+                        metrics(
+                            &config.metrics_prefix,
+                            metric_attr[0],
+                            &rule[metric].as_str().unwrap(),
+                            &labels.to_string(),
+                            metric_attr[3],
+                            metric_attr[1],
+                            metric_attr[2],
+                            preamble,
+                        )
+                    )
+                }
+            }
+            // Increase count
+            count += 1;
         }
-        // Increase count
-        count += 1;
-    }
     }
     Ok(ret)
 }
