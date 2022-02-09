@@ -175,6 +175,17 @@ async fn http_get_probe(q: Vec<(String, String)>) -> Result<impl warp::Reply, In
             CONFIG.clone()
         ));
         }
+        if c.ip_firewall_raw == Some(true) {
+            tasks.push(routeros_exporter::spawn_collector!(
+            routeros_exporter::collectors::ip_firewall_raw::run,
+            (*username).parse()?,
+            (*password).parse()?,
+            (*address).parse()?,
+            port.clone(),
+            check_ssl,
+            CONFIG.clone()
+        ));
+        }
     }
 
     // for each task, await
