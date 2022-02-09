@@ -1,7 +1,7 @@
 metrics_prefix = "routeros"
 
 [server]
-port = 65534
+port = 9886
 
 [defaults]
 username = "username"
