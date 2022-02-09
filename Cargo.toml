@@ -12,7 +12,7 @@ warp = { version = "0.3.2" }
 tokio = { version = "1.15.0", features = ["full"] }
 secrecy = { version = "0.8.0", features = ["serde"] }
 serde = { version = "1.0.133", features = ["derive"] }
-serde-aux = { version = "3.0.1" }
+serde-aux = { version = "3.0.1", default-features = false }
 serde_json = { version = "1.0.73" }
 reqwest = { version = "0.11.7", features = ["json"] }
 regex = { version = "1.5.4" }
