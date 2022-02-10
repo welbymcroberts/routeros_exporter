@@ -65,7 +65,7 @@ pub async fn run(
                         };
                         labels.push_str(&*format!(
                             "{k}=\"{v}\"",
-                            k = k.replace("-", "_"),
+                            k = k.replace("-", "_").replace("\"", "_"),
                             v = v.as_str().unwrap()
                         ));
                     }

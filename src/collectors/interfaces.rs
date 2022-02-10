@@ -1,8 +1,9 @@
+use std::collections::HashMap;
+use std::error::Error;
+
 use crate::collectors::helpers::{
     collector_preamble, collector_request_get, make_metric, make_metric_preamble,
 };
-use std::collections::HashMap;
-use std::error::Error;
 
 pub fn metrics(
     metric_prefix: &str,
@@ -88,6 +89,13 @@ pub async fn run(
         // If interface has is a slave, add it as a label
         if interface.get("slave") != None {
             labels.push_str(&*format!(",slave=\"{}\"", "true"));
+        };
+
+        // If interface has a comment, add it as a label
+        if interface.get("comment") != None {
+            // Strip "'s from output
+            let comment: String = interface["comment"].as_str().unwrap().replace("\"", "_");
+            if comment != "" { labels.push_str(&*format!(",comment=\"{}\"", comment)); }
         };
 
         // Only do preamble on first interface
