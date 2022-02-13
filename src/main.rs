@@ -189,6 +189,18 @@ async fn http_get_probe(q: Vec<(String, String)>) -> Result<impl warp::Reply, In
         }
     }
 
+    if c.health == Some(true) {
+        tasks.push(routeros_exporter::spawn_collector!(
+            routeros_exporter::collectors::system_health::run,
+            (*username).parse()?,
+            (*password).parse()?,
+            (*address).parse()?,
+            port.clone(),
+            check_ssl,
+            CONFIG.clone()
+        ));
+    }
+
     // for each task, await
     for t in tasks {
         // TODO: handle connection refused etc
