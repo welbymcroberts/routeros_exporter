@@ -9,7 +9,7 @@ edition = "2021"
 lazy_static = { version = "1.4.0" }
 futures = { version = "0.3" }
 warp = { version = "0.3.2" }
-tokio = { version = "1.15.0", features = ["full"] }
+tokio = { version = "1.18.5", features = ["full"] }
 secrecy = { version = "0.8.0", features = ["serde"] }
 serde = { version = "1.0.133", features = ["derive"] }
 serde-aux = { version = "3.0.1", default-features = false }
